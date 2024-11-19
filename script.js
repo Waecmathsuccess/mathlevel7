@@ -1,24 +1,53 @@
-// List of random quotes
-const quotes = [
-    "The best way to predict the future is to invent it.",
-    "Life is 10% what happens to us and 90% how we react to it.",
-    "Your time is limited, so don’t waste it living someone else’s life.",
-    "The only way to do great work is to love what you do.",
-    "Success is not the key to happiness. Happiness is the key to success.",
-    "You miss 100% of the shots you don’t take.",
-    "Don’t wait. The time will never be just right.",
-    "Dream big and dare to fail."
-];
+document.getElementById('quizForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent form submission
 
-// Select elements
-const quoteElement = document.getElementById("quote");
-const generateButton = document.getElementById("generateButton");
+    let score = 0;
+    const totalQuestions = 5;
 
-// Function to generate a random quote
-function generateQuote() {
-    const randomIndex = Math.floor(Math.random() * quotes.length);
-    quoteElement.textContent = quotes[randomIndex];
+    // Clear all previous feedback
+    document.querySelectorAll('.feedback').forEach(feedback => {
+        feedback.textContent = '';
+    });
+
+    // Correct answers for each question
+    const correctAnswers = {
+        q1: 'B',
+        q2: 'A',
+        q3: 'B',
+        q4: 'A',
+        q5: 'A'
+    };
+
+    // Check each question
+    for (let i = 1; i <= totalQuestions; i++) {
+        const questionName = 'q' + i;
+        const selectedOption = document.querySelector(`input[name="${questionName}"]:checked`);
+        const feedbackElement = document.getElementById(`feedback${i}`);
+
+        if (selectedOption) {
+            if (selectedOption.value === correctAnswers[questionName]) {
+                feedbackElement.textContent = '✔ Correct!';
+                feedbackElement.style.color = 'green';
+                score++;
+            } else {
+                feedbackElement.textContent = '✖ Incorrect!';
+                feedbackElement.style.color = 'red';
+            }
+        } else {
+            feedbackElement.textContent = '✖ No answer selected!';
+            feedbackElement.style.color = 'red';
+        }
+    }
+
+    alert(`Your score is ${score} out of ${totalQuestions}`);
+});
+
+function submitAssignment() {
+    const assignmentText = document.getElementById('assignmentInput').value;
+    if (assignmentText.trim() === "") {
+        alert("Please write something before submitting!");
+    } else {
+        alert("Your assignment has been submitted. Please send it to the email provided.");
+        document.getElementById('assignmentInput').value = ''; // Clear the textarea
+    }
 }
-
-// Add event listener
-generateButton.addEventListener("click", generateQuote);
